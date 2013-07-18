@@ -306,7 +306,13 @@ svg.selectAll("circle")
 
 function click2(d) {
 	console.log("HELLLLLLOOOOO")
-	console.log(d.pct_change)}
+	console.log(d.pct_change)
+	svg.append("rect2")
+    .attr("width", 300)
+    .attr("height", 100)
+    .html("Testing Click Function")
+    .on("click", reset);
+    }
 
 
 function click(d) {
