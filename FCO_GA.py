@@ -124,4 +124,3 @@ L = CC.join(yx)
 del L['country']
 L.index = CC['country']
 L.to_csv(pth+'World_Visits.csv')
-print 'Finished'
