@@ -115,16 +115,7 @@ rect {
   border: grey;
 }
 
-rect2 {
-  position: fixed;
-  margin-left:500px:
-  margin-top:200px;
-  fill: grey;
-  pointer-events: all;
-  border: grey;
-  opacity: 0.7;
 
-}
 
 </style>
 
@@ -318,9 +309,11 @@ svg.selectAll("circle")
 function click2(d) {
 	console.log("HELLLLLLOOOOO")
 	console.log(d.pct_change)
-	svg.append("rect2")
+	svg.append("rect")
     .attr("width", 300)
     .attr("height", 100)
+    .style("fill", grey)
+    .style("opacity", 0.7)
     .html("Testing Click Function")
     .on("click", reset);
     }
