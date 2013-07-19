@@ -307,6 +307,7 @@ svg.selectAll("circle")
 // })
 
 function click2(d) {
+	var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
 	console.log("HELLLLLLOOOOO")
 	console.log(d.pct_change)
 	svg.append("rect")
