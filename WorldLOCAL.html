@@ -1,0 +1,557 @@
+<html>
+
+<meta charset="utf-8"> 
+<meta http-equiv="Cache-control" content="No-Cache">
+<style>
+
+path {
+/*   fill: teal; */
+  fill: #ccc;
+/*   stroke: #ccc; */
+  stroke: white;
+  stroke: #eee;
+  stroke-width: .25px;
+}
+
+
+path:hover {
+	fill: #708DE2;
+	opacity: 0.55;
+	}
+
+
+.boundary {
+
+  stroke: grey;
+  stroke-linejoin: round;
+  stroke-width: 2px;
+ 
+}
+
+path.country.active {
+	fill: orange;
+	opacity: 0.5;
+	}
+
+.country {/*   fill: teal; */
+  fill: #ccc;
+/*   stroke: #ccc; */
+  stroke: white;
+  stroke: #eee;
+  stroke-width: .25px;
+}
+	
+
+.mesh {
+  fill: none;
+  stroke: grey;
+  stroke-width: 0.5px;
+  stroke-linejoin: round;
+}
+
+
+div.tooltip {
+  color: #222; 
+  background: #fff; 
+  padding: .5em; 
+  text-shadow: #f5f5f5 0 1px 0;
+  border-radius: 2px; 
+  box-shadow: 0px 0px 2px 0px #a6a6a6; 
+  opacity: 0.9; 
+  position: absolute;
+  
+  }
+
+div.tooltip.hidden {
+	display: none;
+	}  
+
+
+div.tooltip1 {
+  color: #333; 
+  background: #fff; 
+  padding: .5em; 
+  text-shadow: #f5f5f5 0 1px 0;
+  border-radius: 2px; 
+  box-shadow: 0px 0px 2px 0px #a6a6a6; 
+  opacity: 0.9; 
+  position: absolute;
+  
+  }
+
+div.tooltip1.hidden {
+	display: none;
+	}
+
+div.tooltip2 {
+  color: #333; 
+  background: #fff; 
+  padding: .5em; 
+  text-shadow: #f5f5f5 0 1px 0;
+  border-radius: 2px; 
+  box-shadow: 0px 0px 2px 0px #a6a6a6; 
+  opacity: 0.9; 
+  position: absolute;
+  
+  }
+
+div.tooltip2.hidden {
+	display: none;
+	}
+
+
+
+#BB {
+	font-family: monospace;
+	position: fixed;
+	width: 200px;
+	margin: -20px 0px;
+	padding:10px;
+	background: white;
+	opacity: 0.75;
+}
+
+.copyright-notice {
+	font-size: 8px;
+	font-family: monospace;
+	}
+
+
+
+
+/* text { */
+/*   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; */
+/*   font-family: "monospace"; */
+/*   font-size: 12px; */
+/*   text-anchor: middle; */
+/* } */
+
+text {
+	font: 10px sans-serif;
+	text-align: right;
+	padding 3px
+	margin 1px;
+	color: white;
+	}
+
+
+rect {
+  margin-top:0px;
+  fill: none;
+  pointer-events: all;
+  border: grey;
+}
+
+.chart rect {
+	fill: steelblue;
+	stroke: white;
+	opacity: 1;
+}
+
+.chart {
+	position: absolute;
+	background: 'white';
+	border: 'black';
+	opacity: 1;
+	
+	}
+
+.chart.hidden {
+	display: none;
+	}
+
+</style>
+
+<body>
+<div id = "BB">
+<h1>FCO Travel Advice</h1>
+
+<p>World Map with FCO Travel Advice Hotspots Indicated.</p>
+
+<p class="copyright-notice">D. Collins 2013.</p>
+</div>
+
+<div id="map"></div>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+var W2 = screen.availWidth
+var H2 = screen.availHeight
+
+//  $(document).ready(function() {
+//        $(window).resize(function() {
+//          
+//            bodyheight = $(window).height();
+//            console.log(bodyheight)
+//           $("svg").height(bodyheight/1.2);
+//        	  
+//         }); 
+//     });
+    
+var width = W2,
+    height = H2,
+    active;
+    
+var radius = d3.scale.linear()
+    .domain([100, 1e4])
+    .range([1, 50]);
+
+
+
+
+
+var projection = d3.geo.mercator()
+		.translate([480, 550])
+		.scale(230);
+
+var path = d3.geo.path()
+    .projection(projection);
+    
+
+var svg = d3.select("#map").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .style("margin-left", W2/2-width/2);
+
+
+svg.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .on("click", reset);
+
+
+var tooltip = d3.select("#map").append("div")
+	.attr("class", "tooltip");
+	
+var tooltip1 = d3.select("#map").append("div")
+	.attr("class", "tooltip1");
+
+var tooltip2 = d3.select("#map").append("div")
+	.attr("class", "tooltip2");
+
+queue()
+    .defer(d3.json, "http://localhost:8888/Documents/World_FCO/world-110m.json")
+    .defer(d3.tsv, "http://localhost:8888/Documents/World_FCO/world-country-names.tsv")
+    .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
+    .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/World_Visits.csv")
+    .await(ready);
+
+// queue()
+// 		.defer(d3.json, "http://dpcollins.github.io/FCO2/world-110m.json")
+//     	.defer(d3.tsv, "http://dpcollins.github.io/FCO2/world-country-names.tsv")
+// //      .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
+//     	.defer(d3.csv, "http://dpcollins.github.io/FCO2/World_Visits.csv")
+//     	.await(ready);    
+    
+function ready(error, world, names) {
+
+      countries = topojson.feature(world, world.objects.countries).features,
+      neighbors = topojson.neighbors(world.objects.countries.geometries),
+      i = -1,
+      n = countries.length;
+
+// countries.forEach(function(d,i) { 
+//     d.name = names.filter(function(n) { return d.id == n.id; })[0].name; 
+//   });
+
+countries = countries.filter(function(d) {
+    return names.some(function(n) {
+      if (d.id == n.id) return d.name = n.name;
+    });})
+
+
+
+country = svg.selectAll(".country").data(countries);
+
+  country
+   .enter()
+    .insert("path")
+    .attr("class", "country")    
+      .attr("title", function(d,i) { return d.name; })
+      .attr("d", path)
+//       .style("fill", function(d, i) { return color(d.color = d3.max(neighbors[i], function(n) { return countries[n].color; }) + 1 | 0); });
+
+    //Show/hide tooltip
+    country
+      .on("mousemove", function(d,i) {
+        var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
+
+        tooltip
+          .classed("hidden", false)
+          .attr("style", "left:"+(mouse[0]+5)+"px;top:"+(mouse[1] - 50)+"px")
+          .html(d.name)
+      })
+     .on("mouseout", function() {
+   	 			tooltip.classed("hidden", true)})
+   	 .on("click", click)
+
+// Loading lat lon figures as test ////////////////////////////////////////////////
+FG = []
+
+d3.csv("http://localhost:8888/Documents/World_FCO/World_Visits.csv", function(error, data) {
+// d3.csv("http://dpcollins.github.io/FCO2/World_Visits.csv", function(error, data) {
+    svg.selectAll("circle")
+       .data(data)
+       .enter()
+       .append("circle")
+       .attr("cx", function(d) {
+               return projection([d.lon, d.lat])[0]; console.log(d.lon);
+       })
+       .attr("cy", function(d) {
+               return projection([d.lon, d.lat])[1];
+       })
+      .attr("r", function(d) {if (d.pageviews!=0) {
+       					return radius(d.pageviews)} })
+
+// 	  .style("fill", function(d)
+//        					{if (d.pct_change !='') {FG.push(parseInt(d.pct_change))}; 
+//        					var color = d3.scale.linear().domain([d3.min(FG),d3.max(FG)]).range(['red','green']); return color(d.pct_change)  }) 
+//       
+      
+ .style("fill", function(d) {if (d.pct_change > 0)
+	 		{FC = '+'; FF = 'Green'}
+     	else 
+     		{FC = ''; FF = 'Red'} return FF })
+       .style("opacity", 0.7)
+       .style("stroke", '#fff')
+       .style("stroke-width", 0.5);
+       
+//        })
+
+svg.selectAll("circle")
+	.on("mouseover", function(d,i) {
+	 var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
+	 if (d.pct_change > 0)
+	 	{FC = '+'; FF = 'Green'}
+     else 
+     	{FC = ''; FF = 'Red'}   
+    	tooltip1
+          .classed("hidden", false)
+          .attr("style", "left:"+(mouse[0]+50)+"px;top:"+(mouse[1] - 50)+"px")
+          .style("color", "black")
+//           .text(d.city + " coords. Lat: " +d.lat +" Lon: " + d.lon)
+        //   .html("<b>"+d.country+":</b>" +"<br>"+"</br>" + "Pageviews Yesterday:" + d.pageviews)
+//           })
+          
+          .html("<b>"+d.country+"</b>" + "<br>" + "</br>" + " Pageviews Yesterday: " + "<b>"+parseInt(d.pageviews)+"</b>" + "<br>" + "</br>" + "Change: " + "<font color="+FF+">" + FC+d.pct_change+'%')
+          })
+         .style('align', 'center')
+         .on("mouseout", function() {
+//    	 			tooltip1.style("opacity", 0)})
+   	 	 tooltip1.classed("hidden", true)})
+   	 	 
+   	 	 .on("click", click2)
+
+})
+
+// }
+// })
+
+GG = [1]
+TT = []
+GH = []
+function click2(d) {
+ 	
+ 	var t = 12971100663,
+ 	v = 70,
+ 	
+ 	data = d3.range(33).map(next);
+ 	data2 = d3.range(33).map(next2);
+ 	
+ 	GH.push(data)
+ 	
+ 	function next() {
+    return {
+      time: ++t,
+      value: v = ~~Math.max(10, Math.min(90, v + 10 * (Math.random() - .5)))
+    };
+ 		   }
+	
+	function next2() {
+    return {
+      time: ++t,
+      value: v = ~~ 0
+    };
+ 		   }
+	
+	var w = 30,
+      	h = 100;
+  
+    var x = d3.scale.linear()
+      .domain([0, 1])
+      .range([0, w]);
+  
+    var y = d3.scale.linear()
+      .domain([0, 100])
+      .rangeRound([0, h]);
+	
+	var WID = 600;
+	
+	var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
+	console.log("HELLLLLLOOOOO")
+	console.log(d.pct_change)
+	var chart = d3.select("body").append("svg")
+		.attr("class", "chart")
+		.attr("width", WID)
+		.attr("height", 100)
+		.attr("style", "left:"+(mouse[0]+10)+"px;top:"+(mouse[1] + 10)+"px")
+		
+ rects = chart.selectAll("rect")
+			.data(data2)
+			.enter().append("rect")
+			.attr("x", function(d, i) { return x(i); })
+        	.attr("y", function(d) { return h - y(d.value) - .5; })
+        	.attr("width", w)
+        	// .attr("height", 0)
+        	// .transition(1000)
+        	.attr("height", function(d) { return 1.5*y(d.value); })
+ var cc =  chart.selectAll("text")
+   			.data(data2)
+   			.enter().append("text")
+   			.attr("x", function(d, i) { return x(i)+.5; })		
+   			.attr("y", function(d) { return h - y(d.value) - .5; })
+   			.attr("dx", +w/2)
+   			.attr("dy", "1.1em")
+   			.attr("text-anchor", "middle")
+   			.text(function(d) { return d.value})
+   			.style("fill", 'white')
+   			.style("opacity", 0)
+   
+rects.data(data)
+   		.transition().duration(750)
+   		.attr("x", function(d, i) { return x(i); })
+        .attr("y", function(d) { return h - y(d.value) - .5; })
+        .attr("height", function(d) { return y(d.value); })
+        .attr("width", w)
+ 		
+  cc.data(data)
+   		.transition().duration(750)		
+   		.attr("y", function(d) { return h - y(d.value) - .5; })
+   		.attr("dx", +w/2)
+   		.attr("dy", "1.1em")
+   		.attr("text-anchor", "middle")
+   		.text(function(d) { return d.value})
+   		.style("fill", 'white') 
+   		.style("opacity", 1)  		
+   		
+ d3.select('.chart')
+ .on("mouseover", function(d,i) {
+// 	 		var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
+	 	
+	 	tooltip2
+          .classed("hidden", false)
+//           .attr("style", "left:"+(mouse[0]+50)+"px;top:"+(mouse[1] - 110)+"px")
+
+//           .attr("style", "left:" +(w/2)+"px;top:"+(h+10)+"px")
+          .attr("style", "left:"+(mouse[0] + WID/3.3)+"px;top:"+(mouse[1] - 30)+"px")
+          .style("color", "black") 
+          .html("Time series data for "+"<b>"+TT[TT.length-1]+"</b>")})	
+ .on("mouseout", function() {
+//    	 			tooltip1.style("opacity", 0)})
+   	 	 tooltip2.classed("hidden", true)})
+ 
+  
+    if (GG[0] == 1){
+    chart.classed("hidden", false);
+    tooltip1.classed("hidden", true)
+    console.log('Hello')
+    GG[0] = 2
+    }
+// 	.on("click", chart.classed("hidden", true)); 
+// d3.select('.chart')
+// 	.on("click", d3.select('.chart').remove())	
+    else
+    
+//     {chart.classed("hidden",true)
+    {d3.selectAll('.chart').remove()
+    GG[0] = 1}
+    
+    TT.push(d.country)
+    
+   
+    return data}
+
+
+
+
+// function fg() {
+// 	chart.classed("hidden",true)
+// 	}
+
+
+
+function click(d) {
+	if (active === d) return reset();
+	svg.selectAll(".active").classed("active", false);
+	d3.select(this).classed("active", active = d);
+	
+	var b = path.bounds(d);
+	tt =  Math.max((b[1][0] - b[0][0]))
+	console.log(tt)
+	if (tt>300) {A = 2.5; B = 1.5} else {A = 1; B = 2}
+	country.transition().duration(750).attr("transform",
+		"translate("+projection.translate() + ")"
+		+ "scale(" + (0.40*A) /(Math.max((b[1][0] - b[0][0]) )/ width, (b[1][1] - b[0][1]) / height) + ")"
+		+ "translate(" + -(b[1][0] +b[0][0])/ B  + "," + -(b[1][1] + b[0][1]) / 2 + ")");
+	
+	svg.selectAll("circle").transition().duration(750).attr("transform",
+		"translate("+projection.translate() + ")"
+		+ "scale(" + (0.40*A) /(Math.max((b[1][0] - b[0][0]) )/ width, (b[1][1] - b[0][1]) / height) + ")"
+		+ "translate(" + -(b[1][0] +b[0][0])/ B  + "," + -(b[1][1] + b[0][1]) / 2 + ")")
+		.attr("r", function(d){if (d.pageviews>0) {
+       					return radius(d.pageviews)} })
+		.style("stroke-width", 0.3);
+
+//     .attr("r", 10)
+// 		.attr("r", 1);
+		
+	d3.selectAll('.chart').remove()
+	console.log(d.country)	
+	GG = b
+		
+	return b	}
+// });
+	
+}
+
+function reset() {
+	svg.selectAll(".active").classed("active", active = false);
+	country.transition().duration(750).attr("transform", "")
+	svg.selectAll("circle").transition().duration(750).attr("transform", "")
+    .attr("r", function(d) {if (d.pageviews>0) {
+       					return radius(d.pageviews)} })
+	.style("stroke-width", 0.5)
+	d3.selectAll('.chart').remove();
+//     .attr("r", 10)
+}
+
+// 	.attr("r", 3);}
+
+
+// d3.select(self.frameElement).style("height", height + "px");
+
+// function trans() {
+// k = 0
+// svg.selectAll('circle')
+// 	.transition()
+// 	.duration(3000)
+// 	.style("fill",function(d) {if (d.lat>0) {return 'purple'} else {return 'blue'}})
+// 	.attr('r',function(d) {if (d.lat>0) {return 10} else {k = k+1; return 5; k}})
+//    
+// d3.select("#map").append("div")
+// 	.classed("hidden", false)
+// 	.attr("class", "tooltip")
+// 	.attr("style", "left:"+1000+"px"+";"+"top:"+500+'px')
+// 	.html(k+" Countries in Southern Hemisphere")
+// 
+// }
+
+
+
+</script>
+
