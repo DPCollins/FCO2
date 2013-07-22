@@ -486,7 +486,7 @@ line = chart.append("svg:line")
 				  .style("stroke-opacity", 0.5)
 				  .style("stroke-width", 2);
  
-line.transition(1000)
+line.transition().duration(1000)
 	.attr("x2", WID-0.5)
 	.style("stroke-opacity", 1)
 	 
