@@ -101,7 +101,7 @@ div.tooltip2.hidden {
 
 
 
-#BB {
+.BB {
 	font-family: monospace;
 	position: fixed;
 	width: 200px;
@@ -110,6 +110,22 @@ div.tooltip2.hidden {
 	background: white;
 	opacity: 0.75;
 }
+
+.BB2 {
+	font-family: monospace;
+	position: absolute;
+	width: 300px;
+	height: 20px;
+	top: 55%;
+	padding:10px;
+	background: none;
+	opacity: 0.95;
+}
+
+
+.BB2.hidden {
+	display: none;
+	}
 
 .copyright-notice {
 	font-size: 8px;
@@ -160,10 +176,18 @@ rect {
 	display: none;
 	}
 
+
+.logo{color:black;text-align:center;font-size:20px;line-height:0px;font-weight:bold;text-transform:lowercase;text-shadow:0 1px 2px rgba(0,0,0,0.4);background:}
+
+
 </style>
 
 <body>
-<div id = "BB">
+
+<div class = "BB2"><h1 class="logo">Click me!</h1></div>
+
+
+<div class = "BB">
 <h1>FCO Travel Advice</h1>
 
 <p>World Map with FCO Travel Advice Hotspots Indicated.</p>
@@ -234,19 +258,19 @@ var tooltip1 = d3.select("#map").append("div")
 var tooltip2 = d3.select("#map").append("div")
 	.attr("class", "tooltip2");
 
-// queue()
-//     .defer(d3.json, "http://localhost:8888/Documents/World_FCO/world-110m.json")
-//     .defer(d3.tsv, "http://localhost:8888/Documents/World_FCO/world-country-names.tsv")
-//     .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
-//     .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/World_Visits.csv")
-//     .await(ready);
-
 queue()
-		.defer(d3.json, "http://dpcollins.github.io/FCO2/world-110m.json")
-    	.defer(d3.tsv, "http://dpcollins.github.io/FCO2/world-country-names.tsv")
-//      .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
-    	.defer(d3.csv, "http://dpcollins.github.io/FCO2/World_Visits.csv")
-    	.await(ready);    
+    .defer(d3.json, "http://localhost:8888/Documents/World_FCO/world-110m.json")
+    .defer(d3.tsv, "http://localhost:8888/Documents/World_FCO/world-country-names.tsv")
+    .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
+    .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/World_Visits.csv")
+    .await(ready);
+
+// queue()
+// 		.defer(d3.json, "http://dpcollins.github.io/FCO2/world-110m.json")
+//     	.defer(d3.tsv, "http://dpcollins.github.io/FCO2/world-country-names.tsv")
+// //      .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
+//     	.defer(d3.csv, "http://dpcollins.github.io/FCO2/World_Visits.csv")
+//     	.await(ready);    
     
 function ready(error, world, names) {
 
@@ -292,9 +316,10 @@ country = svg.selectAll(".country").data(countries);
 
 // Loading lat lon figures as test ////////////////////////////////////////////////
 FG = []
+XZ = []
 
-// d3.csv("http://localhost:8888/Documents/World_FCO/World_Visits.csv", function(error, data) {
-d3.csv("http://dpcollins.github.io/FCO2/World_Visits.csv", function(error, data) {
+d3.csv("http://localhost:8888/Documents/FCO2/World_Visits2.csv", function(error, data) {
+// d3.csv("http://dpcollins.github.io/FCO2/World_Visits.csv", function(error, data) {
     svg.selectAll("circle")
        .data(data)
        .enter()
@@ -305,7 +330,7 @@ d3.csv("http://dpcollins.github.io/FCO2/World_Visits.csv", function(error, data)
        .attr("cy", function(d) {
                return projection([d.lon, d.lat])[1];
        })
-      .attr("r", function(d) {if (d.pageviews!=0) {
+       .attr("r", function(d) {if (d.pageviews!=0) {
        					return radius(d.pageviews)} })
 
 // 	  .style("fill", function(d)
@@ -322,6 +347,9 @@ d3.csv("http://dpcollins.github.io/FCO2/World_Visits.csv", function(error, data)
        .style("stroke-width", 0.5);
        
 //        })
+// x = function(d) {return xz = data}
+XZ.push(data)
+// x()
 
 svg.selectAll("circle")
 	.on("mouseover", function(d,i) {
@@ -355,13 +383,24 @@ svg.selectAll("circle")
 GG = [1]
 TT = []
 GH = []
+JJ = []
+
 function click2(d) {
  	
+ 	TT = []
+ 	JJ = []
+
+ 	TT.push(d.country)
+ 	for (var i=0;i<25;i++)
+ 	{
+ 	JJ.push(XZ[0][i][TT[0]])
+ 	}
+ 	d3.select('.BB2').classed('hidden', true)
  	var t = 12971100663,
  	v = 70,
  	
- 	data = d3.range(33).map(next);
- 	data2 = d3.range(33).map(next2);
+ 	data = d3.range(31).map(next);
+ 	data2 = d3.range(31).map(next2);
  	
  	GH.push(data)
  	
@@ -379,7 +418,7 @@ function click2(d) {
     };
  		   }
 	
-	var w = 30,
+	var w = 25,
       	h = 100;
   
     var x = d3.scale.linear()
@@ -390,13 +429,14 @@ function click2(d) {
       .domain([0, 100])
       .rangeRound([0, h]);
 	
-	var WID = 600;
+	var WID = 775;
 	
 	var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
 	console.log("HELLLLLLOOOOO")
 	console.log(d.pct_change)
 	var chart = d3.select("body").append("svg")
 		.attr("class", "chart")
+		.attr("id", d.country)
 		.attr("width", WID)
 		.attr("height", 100)
 		.attr("style", "left:"+(mouse[0]+10)+"px;top:"+(mouse[1] + 10)+"px")
@@ -407,6 +447,7 @@ function click2(d) {
 			.attr("x", function(d, i) { return x(i); })
         	.attr("y", function(d) { return h - y(d.value) - .5; })
         	.attr("width", w)
+        	.style("opacity",0.3)
         	// .attr("height", 0)
         	// .transition(1000)
         	.attr("height", function(d) { return 1.5*y(d.value); })
@@ -423,14 +464,15 @@ function click2(d) {
    			.style("opacity", 0)
    
 rects.data(data)
-   		.transition().duration(750)
+   		.transition().duration(1000)
    		.attr("x", function(d, i) { return x(i); })
         .attr("y", function(d) { return h - y(d.value) - .5; })
         .attr("height", function(d) { return y(d.value); })
         .attr("width", w)
+        .style("opacity", 1)
  		
   cc.data(data)
-   		.transition().duration(750)		
+   		.transition().duration(1000)		
    		.attr("y", function(d) { return h - y(d.value) - .5; })
    		.attr("dx", +w/2)
    		.attr("dy", "1.1em")
@@ -439,20 +481,28 @@ rects.data(data)
    		.style("fill", 'white') 
    		.style("opacity", 1)  		
    		
- d3.select('.chart')
- .on("mouseover", function(d,i) {
+ hj = d3.select('.chart').style('left')
+ tj = d3.select('.tooltip2').style('width')
+ hj2 = parseInt(hj.slice(0,hj.length-2))
+ tj2 = parseInt(tj.slice(0,tj.length-2))
+ 
+d3.selectAll('.chart')
+ 		.on("mouseover", function(d,i) {
 // 	 		var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
+		G = d3.select(this).attr('id')
+		G4 = parseInt(d3.select(this).style('left'))
+		console.log(G4)
+		console.log(G)
 	 	
 	 	tooltip2
           .classed("hidden", false)
 //           .attr("style", "left:"+(mouse[0]+50)+"px;top:"+(mouse[1] - 110)+"px")
-
-//           .attr("style", "left:" +(w/2)+"px;top:"+(h+10)+"px")
-          .attr("style", "left:"+(mouse[0] + WID/3.3)+"px;top:"+(mouse[1] - 30)+"px")
+//           .attr("style", "left:"+(mouse[0] + WID/3.3)+"px;top:"+(mouse[1] - 30)+"px")
+          .attr("style", "left:"+(G4 + WID/2 - 85)+"px;top:"+(mouse[1] - 30)+"px")
           .style("color", "black") 
-          .html("Time series data for "+"<b>"+TT[TT.length-1]+"</b>")})	
+//           .html("Time series data for "+"<b>"+TT[TT.length-1]+"</b>")})	
+		  .html("Time series data for "+"<b>"+G+"</b>")})
  .on("mouseout", function() {
-//    	 			tooltip1.style("opacity", 0)})
    	 	 tooltip2.classed("hidden", true)})
  
   
@@ -469,23 +519,24 @@ rects.data(data)
     
 //     {chart.classed("hidden",true)
     {d3.selectAll('.chart').remove()
-    GG[0] = 1}
+    GG[0] = 1
+    }
     
-    TT.push(d.country)
+//     TT.push(d.country)
     
    
     return data}
 
 
+d3.select('#map')
+.on('click', high)
 
-
-// function fg() {
-// 	chart.classed("hidden",true)
-// 	}
-
-
+function high()  {
+		GG[0] = 1
+		}
 
 function click(d) {
+	
 	if (active === d) return reset();
 	svg.selectAll(".active").classed("active", false);
 	d3.select(this).classed("active", active = d);
@@ -512,7 +563,7 @@ function click(d) {
 		
 	d3.selectAll('.chart').remove()
 	console.log(d.country)	
-	GG = b
+// 	GG = b
 		
 	return b	}
 // });
