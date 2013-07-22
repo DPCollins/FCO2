@@ -457,18 +457,18 @@ function click2(d) {
 
 
 var line = chart.append("svg:line")
-				  .attr("x1", 0)
+				  .attr("x1", 0.5)
 				  .attr("y1",h)
 				  .attr("x2",0)
 				  .attr("y2",h)
 			//  	  .style("stroke", "rgb(6,120,155)")
-				  .style("stroke", "black")
+				  .style("stroke", "grey")
 				  .style("stroke-opacity", 0.3)
 				  .style("stroke-width", 2);
  
 line.transition(1000)
-	.attr("x2", WID)
-	.attr("stroke-opacity", 0.95)
+	.attr("x2", WID-0.5)
+	.style("stroke-opacity", 1)
 	 
  
  
