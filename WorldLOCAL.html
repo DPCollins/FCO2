@@ -244,6 +244,7 @@ var svg = d3.select("#map").append("svg")
 
 
 svg.append("rect")
+    .attr("id", "main")
     .attr("width", width)
     .attr("height", height)
     .on("click", reset);
@@ -385,13 +386,31 @@ TT = []
 GH = []
 JJ = []
 
+// filter = svg.append("defs")
+// .append("filter")
+// .attr("id","blur")
+// .append("feGaussianBlur")
+// .attr("stdDeviation",4);
+
+
+
+
+
+
+
 function click2(d) {
  	
+//  	filter.attr("stdDeviation",4)
+//  	load()
  	TT = []
  	JJ = []
 
+// 	function load() {
+//  	d3.select('svg').attr("filter", "url(#blur)");
+//  	console.log('load')}
+ 	
  	TT.push(d.country)
- 	for (var i=0;i<25;i++)
+ 	for (var i=0;i<30;i++)
  	{
  	JJ.push(XZ[0][i][TT[0]])
  	}
@@ -401,6 +420,7 @@ function click2(d) {
  	
  	data = d3.range(31).map(next);
  	data2 = d3.range(31).map(next2);
+ 	data3 = d3.range(63).map(next2);
  	
  	GH.push(data)
  	
@@ -418,14 +438,14 @@ function click2(d) {
     };
  		   }
 	
-	var w = 25,
+	    w = 25,
       	h = 100;
   
-    var x = d3.scale.linear()
+    x = d3.scale.linear()
       .domain([0, 1])
       .range([0, w]);
   
-    var y = d3.scale.linear()
+    y = d3.scale.linear()
       .domain([0, 100])
       .rangeRound([0, h]);
 	
@@ -456,7 +476,7 @@ function click2(d) {
         	.attr("height", function(d) { return 1.5*y(d.value); })
 
 
-var line = chart.append("svg:line")
+line = chart.append("svg:line")
 				  .attr("x1", 0.5)
 				  .attr("y1",h)
 				  .attr("x2",0)
@@ -473,7 +493,7 @@ line.transition(1000)
  
  
  
- var cc =  chart.selectAll("text")
+ cc =  chart.selectAll("text")
    			.data(data2)
    			.enter().append("text")
    			.attr("x", function(d, i) { return x(i)+.5; })		
@@ -550,11 +570,13 @@ d3.selectAll('.chart')
     return data}
 
 
-d3.select('#map')
+d3.select('svg')
 .on('click', high)
 
 function high()  {
+		
 		GG[0] = 1
+		
 		}
 
 function click(d) {
@@ -584,6 +606,8 @@ function click(d) {
 // 		.attr("r", 1);
 		
 	d3.selectAll('.chart').remove()
+	filter.attr("stdDeviation",0)
+    load()
 	console.log(d.country)	
 // 	GG = b
 		
@@ -593,14 +617,43 @@ function click(d) {
 }
 
 function reset() {
+	console.log('reset')
 	svg.selectAll(".active").classed("active", active = false);
 	country.transition().duration(750).attr("transform", "")
 	svg.selectAll("circle").transition().duration(750).attr("transform", "")
     .attr("r", function(d) {if (d.pageviews>0) {
        					return radius(d.pageviews)} })
 	.style("stroke-width", 0.5)
-	d3.selectAll('.chart').remove();
-//     .attr("r", 10)
+	
+	d3.selectAll('.chart').selectAll('rect').data(data3).transition().duration(1000)
+	.attr("x", function(d, i) { return x(i); })
+        .attr("y", function(d) { return h - y(d.value) - .5; })
+        .attr("height", function(d) { return y(d.value); })
+        .attr("width", w)
+        .style("opacity", 0)
+        
+
+	
+	 d3.selectAll('.chart').selectAll('text').data(data3)
+   		.transition().duration(1000)		
+   		.attr("y", function(d) { return h - y(d.value) - .5; })
+   		.attr("dx", +w/2)
+   		.attr("dy", "1.1em")
+   		.attr("text-anchor", "middle")
+//    		.text(function(d) { return d.value})
+   		.style("fill", 'white') 
+   		.style("opacity", 0) 
+   		
+
+	d3.selectAll('line').transition().duration(1000)
+	.attr("x2", 0)
+	.style("stroke-opacity", 0)
+
+
+	d3.selectAll('.chart').transition().delay(1500).remove()
+	
+// 	 filter.attr("stdDeviation",0);
+
 }
 
 // 	.attr("r", 3);}
