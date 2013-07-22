@@ -434,13 +434,16 @@ function click2(d) {
 	var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
 	console.log("HELLLLLLOOOOO")
 	console.log(d.pct_change)
+	
 	var chart = d3.select("body").append("svg")
 		.attr("class", "chart")
 		.attr("id", d.country)
 		.attr("width", WID)
-		.attr("height", 100)
+		.attr("height", 110)
 		.attr("style", "left:"+(mouse[0]+10)+"px;top:"+(mouse[1] + 10)+"px")
 		
+ 
+ 
  rects = chart.selectAll("rect")
 			.data(data2)
 			.enter().append("rect")
@@ -451,6 +454,25 @@ function click2(d) {
         	// .attr("height", 0)
         	// .transition(1000)
         	.attr("height", function(d) { return 1.5*y(d.value); })
+
+
+var line = chart.append("svg:line")
+				  .attr("x1", 0)
+				  .attr("y1",h)
+				  .attr("x2",0)
+				  .attr("y2",h)
+			//  	  .style("stroke", "rgb(6,120,155)")
+				  .style("stroke", "black")
+				  .style("stroke-opacity", 0.3)
+				  .style("stroke-width", 2);
+ 
+line.transition(1000)
+	.attr("x2", WID)
+	.attr("stroke-opacity", 0.95)
+	 
+ 
+ 
+ 
  var cc =  chart.selectAll("text")
    			.data(data2)
    			.enter().append("text")
