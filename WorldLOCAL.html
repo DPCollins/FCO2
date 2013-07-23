@@ -184,7 +184,7 @@ rect {
 
 <body>
 
-<div class = "BB2"><h1 class="logo">Click On A Circle!</h1></div>
+<div class = "BB2"><h1 class="logo">Click me!</h1></div>
 
 
 <div class = "BB">
@@ -317,10 +317,18 @@ country = svg.selectAll(".country").data(countries);
 
 // Loading lat lon figures as test ////////////////////////////////////////////////
 FG = []
+GG = []
 XZ = []
+DZ = []
+DZ2 = []
 
 // d3.csv("http://localhost:8888/Documents/FCO2/WV2.csv", function(error, data) {
 d3.csv("http://dpcollins.github.io/FCO2/WV2.csv", function(error, data) {
+    DZ.push(data)
+    for (i=0;i<DZ[0].length;i++) 
+    if (DZ[0][i].pct_change != '') {
+    DZ2.push(parseFloat(DZ[0][i].pct_change))}
+    
     svg.selectAll("circle")
        .data(data)
        .enter()
@@ -334,15 +342,29 @@ d3.csv("http://dpcollins.github.io/FCO2/WV2.csv", function(error, data) {
        .attr("r", function(d) {if (d.pageviews!=0) {
        					return radius(d.pageviews)} })
 
-// 	  .style("fill", function(d)
-//        					{if (d.pct_change !='') {FG.push(parseInt(d.pct_change))}; 
-//        					var color = d3.scale.linear().domain([d3.min(FG),d3.max(FG)]).range(['red','green']); return color(d.pct_change)  }) 
-//       
+	  .style("fill", function(d)
+       					{
+       					if (d.pct_change !='' && d.pct_change < 0) {FG.push(parseFloat(d.pct_change)); 
+       					
+       					var color = d3.scale.linear().domain([d3.min(DZ2),0]).range(['#F00000','#A80000'])}  
+       					
+       					
+       					else if (d.pct_change !='' && d.pct_change > 0) { GG.push(parseFloat(d.pct_change));
+       					
+       					var color = d3.scale.linear().domain([0, d3.max(DZ2)]).range(['#186800','#28F000'])}
+       					
+       					else {console.log('error'); var color = d3.scale.linear().domain([0, 0]).range(['black','white'])}
+       					
+       					
+       					
+       					return color(d.pct_change)
+       					}) 
+//       			
       
- .style("fill", function(d) {if (d.pct_change > 0)
-	 		{FC = '+'; FF = 'Green'}
-     	else 
-     		{FC = ''; FF = 'Red'} return FF })
+//  .style("fill", function(d) {if (d.pct_change > 0)
+// 	 		{FC = '+'; FF = 'Green'}
+//      	else 
+//      		{FC = ''; FF = 'Red'} return FF })
        .style("opacity", 0.7)
        .style("stroke", '#fff')
        .style("stroke-width", 0.5);
@@ -555,10 +577,11 @@ d3.selectAll('.chart')
           .classed("hidden", false)
 //           .attr("style", "left:"+(mouse[0]+50)+"px;top:"+(mouse[1] - 110)+"px")
 //           .attr("style", "left:"+(mouse[0] + WID/3.3)+"px;top:"+(mouse[1] - 30)+"px")
-          .attr("style", "left:"+(G4 + WID/2 - 85)+"px;top:"+(mouse[1] - 30)+"px")
+          .attr("style", "left:"+(G4 + WID/2 - 120)+"px;top:"+(mouse[1] - 30)+"px")
           .style("color", "black") 
 //           .html("Time series data for "+"<b>"+TT[TT.length-1]+"</b>")})	
-		  .html("Time series data for "+"<b>"+G+"</b>")})
+// 		  .html("Time series data for "+"<b>"+G+"</b>")})
+ 	.html("Visits to "+"<b>"+G+"</b>" + " page over past 14 days")})
  .on("mouseout", function() {
    	 	 tooltip2.classed("hidden", true)})
  
