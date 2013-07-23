@@ -124,3 +124,80 @@ L = CC.join(yx)
 del L['country']
 L.index = CC['country']
 L.to_csv(pth+'World_Visits.csv')
+
+
+
+
+
+
+
+
+t = datetime.today()
+
+yesterday = t - timedelta(1)
+dbyy = t - timedelta(14)
+
+end = yesterday.strftime('%Y-%m-%d')
+dbz = dbyy.strftime('%Y-%m-%d')
+
+max_results = 1e6
+metrics = ['pageviews']
+dimensions = ['date','pagePath']
+filters = ['pagePath=~^/foreign-travel-advice/']
+
+start = dbyy.strftime('%Y-%m-%d')
+end = end
+
+print "Start Date: %s " % (start)
+print "End Date: %s " % (end)
+
+df1 = ga.read_ga(metrics,
+				 dimensions = dimensions,
+				 start_date = start, 
+				 end_date = end, 
+				 token_file_name = '/Users/danielcollins/Documents/GA Python/analytics.dat',
+				 filters = filters,
+			 	 max_results=max_results,        
+                 chunksize=5000
+                 )
+				 
+
+df1_conc = pd.concat([x for x in df1])
+
+# dby= df1_conc.sort(['date'], ascending=[0,1])
+
+
+G = []
+for i in df1_conc.index:
+	if (str(i).count('/') == 2):
+		G.append(i)
+HH = df1_conc.ix[G]
+
+YY = HH.ix[HH.index[len(HH.index)-1][0]]
+l = YY['pageviews']>100
+l2 = np.where(l==True)
+TT = list(l2[0])		
+DD = YY.ix[TT]   
+
+#  DD is list of countries fulfilling > 100 views yesterday - reference
+QQ = HH.unstack()
+w2 = []
+
+w = ([('pageviews', x) for x in DD.index])
+A = QQ[w]
+T = [str.split(str(x[1]), '/')[2] for x in A.columns]
+# A.to_csv('Quick.csv')
+A.columns = [x.title() for x in T]
+A = A.rename(columns={'Usa':'USA'})
+A.to_csv(pth+'Quick.csv')
+
+
+II = pd.read_csv(pth+'World_Visits.csv')
+JJ = pd.read_csv(pth+'Quick.csv')
+
+for g in JJ.columns:
+	II[g] = JJ[g]
+II.to_csv(pth+'WV2.csv')
+
+
+

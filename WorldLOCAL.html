@@ -184,7 +184,7 @@ rect {
 
 <body>
 
-<div class = "BB2"><h1 class="logo">Click on a circle!</h1></div>
+<div class = "BB2"><h1 class="logo">Click On A Circle!</h1></div>
 
 
 <div class = "BB">
@@ -319,8 +319,8 @@ country = svg.selectAll(".country").data(countries);
 FG = []
 XZ = []
 
-// d3.csv("http://localhost:8888/Documents/FCO2/World_Visits2.csv", function(error, data) {
-d3.csv("http://dpcollins.github.io/FCO2/World_Visits.csv", function(error, data) {
+// d3.csv("http://localhost:8888/Documents/FCO2/WV2.csv", function(error, data) {
+d3.csv("http://dpcollins.github.io/FCO2/WV2.csv", function(error, data) {
     svg.selectAll("circle")
        .data(data)
        .enter()
@@ -361,7 +361,7 @@ svg.selectAll("circle")
      	{FC = ''; FF = 'Red'}   
     	tooltip1
           .classed("hidden", false)
-          .attr("style", "left:"+(mouse[0]+50)+"px;top:"+(mouse[1] - 50)+"px")
+          .attr("style", "left:"+(mouse[0]+50)+"px;top:"+(mouse[1] - 100)+"px")
           .style("color", "black")
 //           .text(d.city + " coords. Lat: " +d.lat +" Lon: " + d.lon)
         //   .html("<b>"+d.country+":</b>" +"<br>"+"</br>" + "Pageviews Yesterday:" + d.pageviews)
@@ -410,27 +410,33 @@ function click2(d) {
 //  	console.log('load')}
  	
  	TT.push(d.country)
- 	for (var i=0;i<30;i++)
+ 	for (var i=0;i<14;i++)
  	{
- 	JJ.push(XZ[0][i][TT[0]])
+ 	JJ.push(parseInt(XZ[0][i][TT[0]]))
  	}
  	d3.select('.BB2').classed('hidden', true)
  	var t = 12971100663,
+//  	var t = 0
  	v = 70,
+ 	i = -1
  	
  	data = d3.range(14).map(next);
  	data2 = d3.range(14).map(next2);
  	data3 = d3.range(29).map(next2);
  	
- 	GH.push(data)
- 	
- 	function next() {
+ // 	GH.push(data)
+//  	
+ 	function next() {i = i+1
+ 			   
     return {
       time: ++t,
-      value: v = ~~Math.max(10, Math.min(90, v + 10 * (Math.random() - .5)))
+//       value: v = ~~Math.max(10, Math.min(90, v + 10 * (Math.random() - .5)))
+      value:  v = parseInt(JJ[i]),
+      
     };
+ 		
  		   }
-	
+// 	
 	function next2() {
     return {
       time: ++t,
@@ -445,8 +451,15 @@ function click2(d) {
       .domain([0, 1])
       .range([0, w]);
   
+   //  if (d3.max(JJ) > 1e3)
+//     	{DD = 3*d3.max(JJ)}
+//     else
+//     	{DD = 1.1*d3.max(JJ)}
+    
+    DD = 1.05*d3.max(JJ)
+    
     y = d3.scale.linear()
-      .domain([0, 100])
+      .domain([0, parseInt(DD)])
       .rangeRound([0, h]);
 	
 	var WID = 490;
@@ -486,7 +499,7 @@ line = chart.append("svg:line")
 				  .style("stroke-opacity", 0.5)
 				  .style("stroke-width", 2);
  
-line.transition().duration(1000)
+line.transition(1000)
 	.attr("x2", WID-0.5)
 	.style("stroke-opacity", 1)
 	 
@@ -521,6 +534,8 @@ rects.data(data)
    		.attr("text-anchor", "middle")
    		.text(function(d) { return d.value})
    		.style("fill", 'white') 
+   		.style("text-rendering", "optimizeLegibility")
+   		.style("font-weight", 'bold')
    		.style("opacity", 1)  		
    		
  hj = d3.select('.chart').style('left')
