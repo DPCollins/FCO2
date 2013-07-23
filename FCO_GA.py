@@ -114,6 +114,8 @@ CC = pd.read_csv(pth+'cities.csv')
 II = []
 for i in CC['country']:
 	j = i.lower()
+	if (j  == 'south-korea '):
+		j = 'south-korea'
 	II.append(j)
 
 CC.index = II
