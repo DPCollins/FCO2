@@ -200,6 +200,7 @@ rect {
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="http://dpcollins.github.io/FCO2/date.format.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
 <script type="text/javascript">
@@ -325,6 +326,10 @@ DZ2 = []
 // d3.csv("http://localhost:8888/Documents/FCO2/WV2.csv", function(error, data) {
 d3.csv("http://dpcollins.github.io/FCO2/WV2.csv", function(error, data) {
     DZ.push(data)
+    date =  new Date(DZ[0][13].date)
+    date3 = new Date(date.setDate(date.getDate()+1))
+    UD = date3.format("dd-mm-yyyy")
+    
     for (i=0;i<DZ[0].length;i++) 
     if (DZ[0][i].pct_change != '') {
     DZ2.push(parseFloat(DZ[0][i].pct_change))}
