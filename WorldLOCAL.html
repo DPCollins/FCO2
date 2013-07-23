@@ -526,20 +526,22 @@ line.transition(1000)
 	.style("stroke-opacity", 1)
 	 
  
- 
+
  
  cc =  chart.selectAll("text")
    			.data(data2)
    			.enter().append("text")
    			.attr("x", function(d, i) { return x(i)+.5; })		
    			.attr("y", function(d) { return h - y(d.value) - .5; })
-   			.attr("dx", +w/2)
+   			.attr("dx", function(){if(document.body.style.MozTransform!=undefined) { return +w} else {return +w/2}})
    			.attr("dy", "1.1em")
    			.attr("text-anchor", "middle")
    			.text(function(d) { return d.value})
    			.style("fill", 'white')
    			.style("opacity", 0)
    
+// if(document.body.style.MozTransform!=undefined) { cc.attr("dx", w)} 
+
 rects.data(data)
    		.transition().duration(1000)
    		.attr("x", function(d, i) { return x(i); })
@@ -551,7 +553,8 @@ rects.data(data)
   cc.data(data)
    		.transition().duration(1000)		
    		.attr("y", function(d) { return h - y(d.value) - .5; })
-   		.attr("dx", +w/2)
+//    		.attr("dx", +w/2)
+   		.attr("dx", function(){if(document.body.style.MozTransform!=undefined) { return +w} else {return +w/2}})
    		.attr("dy", "1.1em")
    		.attr("text-anchor", "middle")
    		.text(function(d) { return d.value})
