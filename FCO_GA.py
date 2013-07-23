@@ -105,7 +105,7 @@ for yy in range(0,2):
 
 ybf = yb.ix[yx.index]	
 yx['pageviews_dby'] = ybf['pageviews']	
-yx['pct_change'] = np.round((yx.icol(0)-yx.icol(1))*100/yx.icol(0),1)
+yx['pct_change'] = np.round((yx.icol(0)-yx.icol(1))*100/yx.icol(1),1)
 
 pth = '/Users/danielcollins/Documents/FCO2/'
 
@@ -128,7 +128,7 @@ L.to_csv(pth+'World_Visits.csv')
 
 
 
-
+# // Very lazy - pasting code snippets. Information id duplicated in the two GA calls.
 
 
 
