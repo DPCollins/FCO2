@@ -328,7 +328,11 @@ DZ2 = []
 // d3.csv("http://localhost:8888/Documents/FCO2/WV2.csv", function(error, data) {
 d3.csv("http://dpcollins.github.io/FCO2/WV2.csv", function(error, data) {
     DZ.push(data)
-    date =  new Date(DZ[0][13].date)
+    dt = DZ[0][13].date
+    dt2 = dt.split('/')
+    dt3 = dt2.reverse()
+    dt4 = dt3.join('/')
+    date =  new Date(dt4)
     date3 = new Date(date.setDate(date.getDate()+1))
     UD = date3.format("dd-mm-yyyy")
     d3.select('body').append('text').text("Last Updated: "+UD).style("margin-left", 88+'%').style('color', 'black').style('font-size', 12)
