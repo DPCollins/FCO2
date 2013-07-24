@@ -78,7 +78,7 @@ for yy in range(0,2):
 	HH = dby.ix[G]		
 
 	if yy == 0:
-		l = HH['pageviews']>=100
+		l = HH['pageviews']>=200
 	else:
 		l = HH['pageviews']>=10
 	l2 = np.where(l==True)
@@ -125,7 +125,7 @@ yx.index = T
 L = CC.join(yx)
 del L['country']
 L["index"] = L.index
-L.drop_duplicates(cols='index', take_last=True, inplace=True)
+# L.drop_duplicates(cols='index', take_last=True, inplace=True)
 del L["index"]
 
 
