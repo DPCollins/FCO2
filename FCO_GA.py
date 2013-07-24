@@ -124,6 +124,12 @@ yx.index = T
 # CC.index = CC['country']
 L = CC.join(yx)
 del L['country']
+L["index"] = L.index
+L.drop_duplicates(cols='index', take_last=True, inplace=True)
+del L["index"]
+
+
+
 L.index = CC['country']
 L.to_csv(pth+'World_Visits.csv')
 
@@ -190,7 +196,11 @@ A = QQ[w]
 T = [str.split(str(x[1]), '/')[2] for x in A.columns]
 # A.to_csv('Quick.csv')
 A.columns = [x.title() for x in T]
-A = A.rename(columns={'Usa':'USA'})
+# A = A.rename(columns={'Usa':'USA'})
+FF = np.where(A.columns=='Usa')
+xc = A.columns
+xc.values[FF[0]] = 'USA'
+A.columns = xc
 A.to_csv(pth+'Quick.csv')
 
 
