@@ -78,7 +78,7 @@ for yy in range(0,2):
 	HH = dby.ix[G]		
 
 	if yy == 0:
-		l = HH['pageviews']>=200
+		l = HH['pageviews']>=75
 	else:
 		l = HH['pageviews']>=10
 	l2 = np.where(l==True)
@@ -102,9 +102,11 @@ for yy in range(0,2):
 #yx  Yesterday		
 #yb  dbyy
 
-
+yb = yb.ix[yb.index]
 ybf = yb.ix[yx.index]	
-yx['pageviews_dby'] = ybf['pageviews']	
+# ybf2 = ybf.drop(ybf.index.get_duplicates())
+ybf2 = ybf.groupby(ybf.index).first()
+yx['pageviews_dby'] = ybf2['pageviews']	
 yx['pct_change'] = np.round((yx.icol(0)-yx.icol(1))*100/yx.icol(1),1)
 
 pth = '/Users/danielcollins/Documents/FCO2/'
@@ -182,7 +184,7 @@ for i in df1_conc.index:
 HH = df1_conc.ix[G]
 
 YY = HH.ix[HH.index[len(HH.index)-1][0]]
-l = YY['pageviews']>100
+l = YY['pageviews']>=75
 l2 = np.where(l==True)
 TT = list(l2[0])		
 DD = YY.ix[TT]   
@@ -198,8 +200,11 @@ T = [str.split(str(x[1]), '/')[2] for x in A.columns]
 A.columns = [x.title() for x in T]
 # A = A.rename(columns={'Usa':'USA'})
 FF = np.where(A.columns=='Usa')
+GG = np.where(A.columns=='Bosnia-And-Herzegovina')
 xc = A.columns
 xc.values[FF[0]] = 'USA'
+if (GG[0]>0):
+	xc.values[GG[0]] = 'Bosnia-and-Herzegovina'
 A.columns = xc
 A.to_csv(pth+'Quick.csv')
 
