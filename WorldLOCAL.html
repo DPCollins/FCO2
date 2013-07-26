@@ -337,7 +337,7 @@ DZ = []
 DZ2 = []
 
 // d3.csv("http://localhost:8888/Documents/FCO2/WV2TEST.csv", function(error, data) {
-d3.csv("http://dpcollins.github.io/FCO2/WV2TEST.csv", function(error, data) {
+d3.csv("http://dpcollins.github.io/FCO2/WV2.csv", function(error, data) {
     DZ.push(data)
     date =  new Date(DZ[0][13].date)
     date3 = new Date(date.setDate(date.getDate()+1));
@@ -395,7 +395,25 @@ XZ.push(data)
 
 svg.selectAll("circle")
 	.on("mouseover", function(d,i) {
-	 var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
+	  mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
+	 
+	 if (mouse[0] > 0.8*W2)
+	 	{ MP = -250}
+	 else	
+	 	{MP = 60}
+	 
+	 if (mouse[0] > 0.7*W2)
+	 	{ MH = -300}
+	 else
+	 	{ MH = -100}
+	 
+	 if (mouse[1] > 0.7*H2)
+	 	{ MV = -200;
+	 	TTV = 250}
+	 else
+	 	{ MV= 20;
+	 	TTV = 30}
+	 
 	 
 	 if (d.ARC == 0) {
 	 	MEDA = ""
@@ -420,10 +438,12 @@ svg.selectAll("circle")
 	 if (d.pct_change > 0)
 	 	{FC = '+'; FF = 'Green'}
      else 
-     	{FC = ''; FF = 'Red'}   
+     	{FC = ''; FF = 'Red'}
+     
+//      if (mouse[   
     	tooltip1
           .classed("hidden", false)
-          .attr("style", "left:"+(mouse[0]+30)+"px;top:"+(mouse[1] - 175)+"px")
+          .attr("style", "left:"+(mouse[0]+MP)+"px;top:"+(mouse[1] - 195)+"px")
           .style("color", "black")
 //           .text(d.city + " coords. Lat: " +d.lat +" Lon: " + d.lon)
         //   .html("<b>"+d.country+":</b>" +"<br>"+"</br>" + "Pageviews Yesterday:" + d.pageviews)
@@ -571,7 +591,7 @@ function click2(d) {
 		.attr("id", d.country)
 		.attr("width", WID)
 		.attr("height", 170)
-		.attr("style", "left:"+(mouse[0]-100)+"px;top:"+(mouse[1] + 20)+"px")
+		.attr("style", "left:"+(mouse[0]+MH)+"px;top:"+(mouse[1] + MV)+"px")
 		
  
  
@@ -656,7 +676,7 @@ d3.selectAll('.chart')
           .classed("hidden", false)
 //           .attr("style", "left:"+(mouse[0]+50)+"px;top:"+(mouse[1] - 110)+"px")
 //           .attr("style", "left:"+(mouse[0] + WID/3.3)+"px;top:"+(mouse[1] - 30)+"px")
-          .attr("style", "left:"+(G4 + WID/2 - 120)+"px;top:"+(mouse[1] - 30)+"px")
+          .attr("style", "left:"+(G4 + WID/2 - 120)+"px;top:"+(mouse[1] - TTV)+"px")
           .style("color", "black") 
 //           .html("Time series data for "+"<b>"+TT[TT.length-1]+"</b>")})	
 // 		  .html("Time series data for "+"<b>"+G+"</b>")})
