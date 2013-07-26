@@ -76,6 +76,7 @@ div.tooltip1 {
   box-shadow: 0px 0px 2px 0px #a6a6a6; 
   opacity: 0.9; 
   position: absolute;
+  line-height: 0.85em;
   
   }
 
@@ -98,7 +99,6 @@ div.tooltip2 {
 
 div.tooltip2.hidden {
 	display: none;
-	opacity:0;
 	}
 
 
@@ -127,6 +127,7 @@ div.tooltip2.hidden {
 
 .BB2.hidden {
 	display: none;
+/* 	opacity: 0; */
 	}
 
 .copyright-notice {
@@ -181,12 +182,13 @@ rect {
 
 .logo{color:black;text-align:center;font-size:20px;line-height:0px;font-weight:bold;text-transform:lowercase;text-shadow:0 1px 2px rgba(0,0,0,0.4);background:}
 
+line-height: 0.5em;
 
 </style>
 
 <body>
 
-<div class = "BB2"><h1 class="logo">Click On A Circle!</h1></div>
+<div class = "BB2"><h1 class="logo">Click me!</h1></div>
 
 
 <div class = "BB">
@@ -245,7 +247,6 @@ var projection = d3.geo.mercator()
 		.translate([Tx,Ty])
 		.scale(Sc);
 
-
 var path = d3.geo.path()
     .projection(projection);
     
@@ -272,19 +273,19 @@ var tooltip1 = d3.select("#map").append("div")
 var tooltip2 = d3.select("#map").append("div")
 	.attr("class", "tooltip2");
 
-// queue()
-//     .defer(d3.json, "http://localhost:8888/Documents/World_FCO/world-110m.json")
-//     .defer(d3.tsv, "http://localhost:8888/Documents/World_FCO/world-country-names.tsv")
-//     .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
-//     .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/World_Visits.csv")
-//     .await(ready);
-
 queue()
-		.defer(d3.json, "http://dpcollins.github.io/FCO2/world-110m.json")
-    	.defer(d3.tsv, "http://dpcollins.github.io/FCO2/world-country-names.tsv")
-//      .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
-    	.defer(d3.csv, "http://dpcollins.github.io/FCO2/World_Visits.csv")
-    	.await(ready);    
+    .defer(d3.json, "http://localhost:8888/Documents/World_FCO/world-110m.json")
+    .defer(d3.tsv, "http://localhost:8888/Documents/World_FCO/world-country-names.tsv")
+    .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
+    .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/World_Visits.csv")
+    .await(ready);
+
+// queue()
+// 		.defer(d3.json, "http://dpcollins.github.io/FCO2/world-110m.json")
+//     	.defer(d3.tsv, "http://dpcollins.github.io/FCO2/world-country-names.tsv")
+// //      .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
+//     	.defer(d3.csv, "http://dpcollins.github.io/FCO2/World_Visits.csv")
+//     	.await(ready);    
     
 function ready(error, world, names) {
 
@@ -335,19 +336,14 @@ XZ = []
 DZ = []
 DZ2 = []
 
-// d3.csv("http://localhost:8888/Documents/FCO2/WV2.csv", function(error, data) {
-d3.csv("http://dpcollins.github.io/FCO2/WV2.csv", function(error, data) {
+d3.csv("http://localhost:8888/Documents/FCO2/WV2TEST.csv", function(error, data) {
+// d3.csv("http://dpcollins.github.io/FCO2/World_Visits.csv", function(error, data) {
     DZ.push(data)
-    dt = DZ[0][13].date
-    dt2 = dt.split('/')
-    dt3 = dt2.reverse()
-    dt4 = dt3.join('/')
-    date =  new Date(dt4)
-    date3 = new Date(date.setDate(date.getDate()+1))
-    UD = date3.format("dd-mm-yyyy")
-    d3.select('body').append('text').text("Last Updated: "+UD).style("margin-left", 88+'%').style('color', 'black').style('font-size', 12)
-    
-    
+    date =  new Date(DZ[0][13].date)
+    date3 = new Date(date.setDate(date.getDate()+1));
+    console.log(date3)
+    UD = date3.format('dd/mm/yyyy')
+    d3.select('#map').append('text').text("Last Updated: "+UD).style("margin-left", 88+'%').style('color', 'black').style('font-size', 12).attr('background', 'rgb(0,0,0,0)')
     for (i=0;i<DZ[0].length;i++) 
     if (DZ[0][i].pct_change != '') {
     DZ2.push(parseFloat(DZ[0][i].pct_change))}
@@ -400,20 +396,75 @@ XZ.push(data)
 svg.selectAll("circle")
 	.on("mouseover", function(d,i) {
 	 var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
+	 
+	 if (d.ARC == 0) {
+	 	MEDA = ""
+	 	}
+	 else
+	 	{
+	 	MEDA = "<br></br>"+"<b>"+"Arctic-Travel: "+"</b>" + d.ARC+'%' + "<font color=blue>" +' ('+ d.MedArctic+'%)' + "<font color=black>"
+	 	}
+	 if (d.SAHEL == 0) {
+	 	SAH = ""
+	 	}
+	 else
+	 	{
+	 	SAH = "<br></br>"+"<b>"+"Sahel Region: "+"</b>" + d.SAHEL+'%' + "<font color=blue>" +' ('+ d.MedSahel +'%)' + "<font color=black>"
+	 	}
+	 
+ if (d.HighCFCO >0) {GGX = "red"} 
+	 else
+	 	{GGX = "black"}
+	 
+	 
 	 if (d.pct_change > 0)
 	 	{FC = '+'; FF = 'Green'}
      else 
      	{FC = ''; FF = 'Red'}   
     	tooltip1
           .classed("hidden", false)
-          .attr("style", "left:"+(mouse[0]+50)+"px;top:"+(mouse[1] - 100)+"px")
+          .attr("style", "left:"+(mouse[0]+30)+"px;top:"+(mouse[1] - 175)+"px")
           .style("color", "black")
 //           .text(d.city + " coords. Lat: " +d.lat +" Lon: " + d.lon)
         //   .html("<b>"+d.country+":</b>" +"<br>"+"</br>" + "Pageviews Yesterday:" + d.pageviews)
 //           })
           
-          .html("<b>"+d.country+"</b>" + "<br>" + "</br>" + " Pageviews Yesterday: " + "<b>"+parseInt(d.pageviews)+"</b>" + "<br>" + "</br>" + "Change: " + "<font color="+FF+">" + FC+d.pct_change+'%')
-          })
+//           .html("<b>"+d.country+"</b>" + "<br>" + "</br>" + " Pageviews Yesterday: " + "<b>"+parseInt(d.pageviews)+"</b>" + "<br>" + "</br>" + "Change: " + "<font color="+FF+">" + FC+d.pct_change+'%' +"<br></br>" + '------------------------------------' //
+    //       + "<br></br>"+ "<font color=black>"+"<font size=2.8>" + "<b>"+"Entry Requirements: "+"</b>" + d.pct_change + " (34%)" + //
+//           "<br></br>" + "<b>"+"Safety and Security: "+"</b>" + d.pct_change + " (25%)" + "<br></br>" + "<b>"+"Terrorism: "+"</b>" + d.pct_change + " (10%)" + "<br></br>" + "<b>"+"Health: "+"</b>" + d.pct_change + " (5%)" + "<br></br>" + "<b>"+"Money: "+"</b>" + d.pct_change + " (2%)")
+//           })
+         
+         .html("<font size=4>"+"<b>"+d.country+"</b>" + "<br></br>" + "<font size=3.5>" + " Pageviews Yesterday: " + "<b>"+parseInt(d.pageviews)+"</b>" + "<br>" + "</br>" + "Change: " + "<font color="+FF+">" + FC+d.pct_change+'%' +"<br></br>" + '----------------------------------------' //
+         + "<br></br>"+ "<font color=black>"+"<font size=2.7em>" + "<b>"+"Summary: "+"</b>" + d.summary+'%' + "<font color=blue>" +' ('+ d.MedSum+'%)' + "<font color=black>" //
+         
+         + "<br></br>"+"<b>"+"Entry-Requirements: "+"</b>" + d.ERQ+'%' + "<font color=blue>" + ' ('+ d.Med_Entreq+'%)' + "<font color=black>"
+         
+         + "<br></br>"+"<b>"+"Safety and Security: "+"</b>" + d.SAS+'%' + "<font color=blue>" +' ('+ d.MedSS +'%)' + "<font color=black>"
+         
+         + "<br></br>"+"<b>"+"Health: "+"</b>" + d.health+'%' + "<font color=blue>" +' ('+ d.MedHealth+'%)' + "<font color=black>"
+         
+         + "<br></br>"+"<b>"+"Money: "+"</b>" + d.money+'%' + "<font color=blue>" +' ('+ d.MedMoney +'%)' + "<font color=black>"
+         
+         + "<br></br>"+"<b>"+"Terrorism: "+"</b>" + d.terrorism+'%' + "<font color=blue>" +' ('+ d.MedTerror+'%)' + "<font color=black>"
+         
+         + "<br></br>"+"<b>"+"Local Laws and Customs: "+"</b>" + d.LLC+'%' + "<font color=blue>"  +' ('+ d.MedLocal +'%)' + "<font color=black>"
+         
+         + "<br></br>"+"<b>"+"Natural Disasters: "+"</b>" + d.ND+'%' + "<font color=blue>" +' ('+ d.MedNatural+'%)' + "<font color=black>"
+         
+         + "<br></br>"+"<b>"+"Contact-FTA: "+"</b>" + "<font color="+GGX+">" + d.CFTA+'%' + "<font color=blue>" + ' ('+ d.MedContact +'%)' + "<font color=black>"
+         
+        //  + "<br></br>"+"<b>"+"Arctic-Travel: "+"</b>" + d.ARC+'%' +' ('+ d.MedArctic+'%)'
+//          
+//          + "<br></br>"+"<b>"+"Sahel Region: "+"</b>" + d.SAHEL+'%' +' ('+ d.MedSahel +'%)'
+		
+		+ MEDA
+		+ SAH
+         
+         
+         ) 
+         
+         })
+         
          .style('align', 'center')
          .on("mouseout", function() {
 //    	 			tooltip1.style("opacity", 0)})
@@ -457,7 +508,6 @@ function click2(d) {
  	TT.push(d.country)
  	if (TT[0] == 'South-Korea ')
  		{TT[0] = 'South-Korea'}
-	
  	for (var i=0;i<14;i++)
  	{
  	JJ.push(parseInt(XZ[0][i][TT[0]]))
@@ -516,7 +566,7 @@ function click2(d) {
 	console.log("HELLLLLLOOOOO")
 	console.log(d.pct_change)
 	
-	var chart = d3.select("body").append("svg")
+	chart = d3.select("body").append("svg")
 		.attr("class", "chart")
 		.attr("id", d.country)
 		.attr("width", WID)
@@ -745,6 +795,15 @@ function reset() {
 // }
 
 
+//   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+//   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+//   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+//   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+// 
+//   ga('create', 'UA-42668100-1', 'dpcollins.github.io');
+//   ga('send', 'pageview');
+// 
+// 
 
 </script>
 
