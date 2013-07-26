@@ -273,19 +273,19 @@ var tooltip1 = d3.select("#map").append("div")
 var tooltip2 = d3.select("#map").append("div")
 	.attr("class", "tooltip2");
 
-queue()
-    .defer(d3.json, "http://localhost:8888/Documents/World_FCO/world-110m.json")
-    .defer(d3.tsv, "http://localhost:8888/Documents/World_FCO/world-country-names.tsv")
-    .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
-    .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/World_Visits.csv")
-    .await(ready);
-
 // queue()
-// 		.defer(d3.json, "http://dpcollins.github.io/FCO2/world-110m.json")
-//     	.defer(d3.tsv, "http://dpcollins.github.io/FCO2/world-country-names.tsv")
-// //      .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
-//     	.defer(d3.csv, "http://dpcollins.github.io/FCO2/World_Visits.csv")
-//     	.await(ready);    
+//     .defer(d3.json, "http://localhost:8888/Documents/World_FCO/world-110m.json")
+//     .defer(d3.tsv, "http://localhost:8888/Documents/World_FCO/world-country-names.tsv")
+//     .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
+//     .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/World_Visits.csv")
+//     .await(ready);
+
+queue()
+		.defer(d3.json, "http://dpcollins.github.io/FCO2/world-110m.json")
+    	.defer(d3.tsv, "http://dpcollins.github.io/FCO2/world-country-names.tsv")
+//      .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
+    	.defer(d3.csv, "http://dpcollins.github.io/FCO2/World_Visits.csv")
+    	.await(ready);    
     
 function ready(error, world, names) {
 
@@ -336,8 +336,8 @@ XZ = []
 DZ = []
 DZ2 = []
 
-d3.csv("http://localhost:8888/Documents/FCO2/WV2TEST.csv", function(error, data) {
-// d3.csv("http://dpcollins.github.io/FCO2/World_Visits.csv", function(error, data) {
+// d3.csv("http://localhost:8888/Documents/FCO2/WV2TEST.csv", function(error, data) {
+d3.csv("http://dpcollins.github.io/FCO2/WV2TEST.csv", function(error, data) {
     DZ.push(data)
     date =  new Date(DZ[0][13].date)
     date3 = new Date(date.setDate(date.getDate()+1));
