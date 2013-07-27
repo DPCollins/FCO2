@@ -273,19 +273,19 @@ var tooltip1 = d3.select("#map").append("div")
 var tooltip2 = d3.select("#map").append("div")
 	.attr("class", "tooltip2");
 
-queue()
-    .defer(d3.json, "http://localhost:8888/Documents/World_FCO/world-110m.json")
-    .defer(d3.tsv, "http://localhost:8888/Documents/World_FCO/world-country-names.tsv")
-    .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
-    .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/World_Visits.csv")
-    .await(ready);
-
 // queue()
-// 		.defer(d3.json, "http://dpcollins.github.io/FCO2/world-110m.json")
-//     	.defer(d3.tsv, "http://dpcollins.github.io/FCO2/world-country-names.tsv")
-// //      .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
-//     	.defer(d3.csv, "http://dpcollins.github.io/FCO2/World_Visits.csv")
-//     	.await(ready);    
+//     .defer(d3.json, "http://localhost:8888/Documents/World_FCO/world-110m.json")
+//     .defer(d3.tsv, "http://localhost:8888/Documents/World_FCO/world-country-names.tsv")
+//     .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
+//     .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/World_Visits.csv")
+//     .await(ready);
+
+queue()
+		.defer(d3.json, "http://dpcollins.github.io/FCO2/world-110m.json")
+    	.defer(d3.tsv, "http://dpcollins.github.io/FCO2/world-country-names.tsv")
+//      .defer(d3.csv, "http://localhost:8888/Documents/World_FCO/cities.csv")
+    	.defer(d3.csv, "http://dpcollins.github.io/FCO2/World_Visits.csv")
+    	.await(ready);    
     
 function ready(error, world, names) {
 
@@ -336,8 +336,8 @@ XZ = []
 DZ = []
 DZ2 = []
 
-d3.csv("http://localhost:8888/Documents/FCO2/WV2TEST.csv", function(error, data) {
-// d3.csv("http://dpcollins.github.io/FCO2/World_Visits.csv", function(error, data) {
+// d3.csv("http://localhost:8888/Documents/FCO2/WV2TEST.csv", function(error, data) {
+d3.csv("http://dpcollins.github.io/FCO2/World_Visits.csv", function(error, data) {
     DZ.push(data)
     date =  new Date(DZ[0][13].date)
     date3 = new Date(date.setDate(date.getDate()+1));
@@ -461,11 +461,7 @@ l = []
 //           .text(d.city + " coords. Lat: " +d.lat +" Lon: " + d.lon)
         //   .html("<b>"+d.country+":</b>" +"<br>"+"</br>" + "Pageviews Yesterday:" + d.pageviews)
 //           })
-          
-//           .html("<b>"+d.country+"</b>" + "<br>" + "</br>" + " Pageviews Yesterday: " + "<b>"+parseInt(d.pageviews)+"</b>" + "<br>" + "</br>" + "Change: " + "<font color="+FF+">" + FC+d.pct_change+'%' +"<br></br>" + '------------------------------------' //
-    //       + "<br></br>"+ "<font color=black>"+"<font size=2.8>" + "<b>"+"Entry Requirements: "+"</b>" + d.pct_change + " (34%)" + //
-//           "<br></br>" + "<b>"+"Safety and Security: "+"</b>" + d.pct_change + " (25%)" + "<br></br>" + "<b>"+"Terrorism: "+"</b>" + d.pct_change + " (10%)" + "<br></br>" + "<b>"+"Health: "+"</b>" + d.pct_change + " (5%)" + "<br></br>" + "<b>"+"Money: "+"</b>" + d.pct_change + " (2%)")
-//           })
+
          
          .html("<font size=4>"+"<b>"+d.country+"</b>" + "<br></br>" + "<font size=3.5>" + " Pageviews Yesterday: " + "<b>"+parseInt(d.pageviews)+"</b>" + "<br>" + "</br>" + "Change: " + "<font color="+FF+">" + FC+d.pct_change+'%' +"<br></br>" + '----------------------------------------' //
          + "<br></br>"+ "<font color=black>"+"<font size=2.7em>" + "<b>"+"Summary: "+"</b>" + d.summary+'%' + "<font color=blue>" +' ('+ d.MedSum+'%)' + "<font color=black>" //
