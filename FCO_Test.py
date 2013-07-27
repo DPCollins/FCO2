@@ -215,7 +215,8 @@ P2['MedSahel'] = np.median(P2['sahel-region'])
 
 
 pth = '/Users/danielcollins/Documents/FCO2/'
- 
+pth2 = '/Users/danielcollins/Documents/FCO_local/' 
+
 CC = pd.read_csv(pth+'cities.csv')
 
 II = []
@@ -315,6 +316,6 @@ WW = II.rename(columns={'entry-requirements': 'ERQ', 'safety-and-security': 'SAS
 
 
 WW.to_csv(pth+'WV2TEST.csv')
-
+WW.to_csv(pth2+'WV2TESTL.csv')
 
 
