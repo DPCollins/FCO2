@@ -462,10 +462,16 @@ l = []
      else 
      	{FC = ''; FF = 'Red'}
      
-//      if (mouse[   
+  
+    if (mouse[1]< 180) 
+    	{VH2 = 100}
+    else 
+    	{VH2 = 195}
+    	
+    	
     	tooltip1
           .classed("hidden", false)
-          .attr("style", "left:"+(mouse[0]+MP)+"px;top:"+(mouse[1] - 195)+"px")
+          .attr("style", "left:"+(mouse[0]+MP)+"px;top:"+(mouse[1] - VH2)+"px")
           .style("color", "black")
 //           .text(d.city + " coords. Lat: " +d.lat +" Lon: " + d.lon)
         //   .html("<b>"+d.country+":</b>" +"<br>"+"</br>" + "Pageviews Yesterday:" + d.pageviews)
