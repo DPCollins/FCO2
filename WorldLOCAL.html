@@ -13,6 +13,11 @@ path {
   stroke-width: .25px;
 }
 
+#map {position: fixed;
+	  top: 0px;
+	  left: 0px;
+	  }
+
 
 path:hover {
 	fill: #708DE2;
@@ -188,6 +193,7 @@ line-height: 0.5em;
 
 <body>
 
+<div id="map"></div>
 <div class = "BB2" div id = "clk" style="display:none"><h1 class="logo">Click on a circle!</h1></div>
 
 
@@ -199,7 +205,7 @@ line-height: 0.5em;
 <p class="copyright-notice">D. Collins 2013.</p>
 </div>
 
-<div id="map"></div>
+
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
@@ -469,8 +475,9 @@ l = []
   
     if (mouse[1]< 211) 
     	{VH2 = 100}
-    else 
-    	{VH2 = 195}
+    else if (mouse[1] > 560) 
+    	{VH2 = 220}    
+    else {VH2 = 195}	
     	
     	
     	tooltip1
