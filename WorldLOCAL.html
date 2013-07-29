@@ -188,7 +188,7 @@ line-height: 0.5em;
 
 <body>
 
-<div class = "BB2"><h1 class="logo">Click on a circle!</h1></div>
+<div class = "BB2" div id = "clk" style="display:none"><h1 class="logo">Click on a circle!</h1></div>
 
 
 <div class = "BB">
@@ -208,6 +208,10 @@ line-height: 0.5em;
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
 <script type="text/javascript">
+
+$(document).ready(function() {
+    $("#clk").delay(750).fadeIn(500);
+})
 
 var W2 = screen.availWidth
 var H2 = screen.availHeight
