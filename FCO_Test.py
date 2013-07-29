@@ -38,6 +38,8 @@ dimensions = ['date','pagePath']
 
 filters = ['pagePath=~^/foreign-travel-advice/']
 
+Stand = []
+
 for yy in range(0,2):
 	
 	if yy == 0:
@@ -138,13 +140,14 @@ for yy in range(0,2):
 		PC.ix[v] = np.round((TT.ix[v]*100/Q),1)
 
 	Sd = np.std(PC['contact-fco-travel-advice-team'])			
-	L = np.where(PC['contact-fco-travel-advice-team'] > 2*Sd)	 	
+	Stand.append(Sd)
+	Lxc = np.where(PC['contact-fco-travel-advice-team'] > 2*Sd)	 	
 		 	
 	
 	
 	
 	TT['pageviews'] = TT.sum(axis=1)
-	FH = TT.ix[L[0],0]
+	FH = TT.ix[Lxc[0],0]
 	for i in range(0,len(FH)):
 		FH.ix[i] = 1
 	FH.name = 'HighCFCO'
@@ -313,7 +316,11 @@ for g in JJ.columns:
 
 WW = II.rename(columns={'entry-requirements': 'ERQ', 'safety-and-security': 'SAS','local-laws-and-customs': "LLC", 'natural-disasters': 'ND','contact-fco-travel-advice-team': 'CFTA', 'arctic-travel':'ARC', 'sahel-region': "SAHEL"})
 	
+SD = 2*np.std(WW.icol(12))
 
+for i in range(0,len(WW)):
+	if (WW.ix[i,12] > SD):
+		WW.ix[i,18] = 1
 
 WW.to_csv(pth+'WV2TEST.csv')
 WW.to_csv(pth2+'WV2TESTL.csv')
