@@ -317,9 +317,10 @@ for g in JJ.columns:
 WW = II.rename(columns={'entry-requirements': 'ERQ', 'safety-and-security': 'SAS','local-laws-and-customs': "LLC", 'natural-disasters': 'ND','contact-fco-travel-advice-team': 'CFTA', 'arctic-travel':'ARC', 'sahel-region': "SAHEL"})
 	
 SD = 2*np.std(WW.icol(12))
+Med2 = WW.icol(12).median()
 
 for i in range(0,len(WW)):
-	if (WW.ix[i,12] > SD):
+	if (WW.ix[i,12] > Med2 + SD):
 		WW.ix[i,18] = 1
 
 WW.to_csv(pth+'WV2TEST.csv')
