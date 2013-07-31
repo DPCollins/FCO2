@@ -354,6 +354,7 @@ GG = []
 XZ = []
 DZ = []
 DZ2 = []
+DZ3 = []
 
 // d3.csv("http://localhost:8888/Documents/FCO2/WV2TEST.csv", function(error, data) {
 d3.csv("http://dpcollins.github.io/FCO2/WV2TEST.csv", function(error, data) {
@@ -370,7 +371,8 @@ d3.csv("http://dpcollins.github.io/FCO2/WV2TEST.csv", function(error, data) {
     
     for (i=0;i<DZ[0].length;i++) 
     if (DZ[0][i].pct_change != '') {
-    DZ2.push(parseFloat(DZ[0][i].pct_change))}
+    DZ2.push(parseFloat(DZ[0][i].pct_change))
+    DZ3.push(parseFloat(DZ[0][i].pageviews))}
     
     svg.selectAll("circle")
        .data(data)
