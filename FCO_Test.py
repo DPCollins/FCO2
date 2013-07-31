@@ -117,7 +117,11 @@ for yy in range(0,2):
 
 	for i in range(0, len(REF)):
 		S = dbv.ix[REF[i]]
-		for k in range(0,len(S)):
+		if len(S) > 11:
+			ll = 11
+		else:
+			ll = len(S)
+		for k in range(0,ll):
 			if (k == 0):
 
 				TT.ix[i,0] = dbv.ix[dbv.ix[REF[i]].index[0]].values[0]
