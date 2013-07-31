@@ -433,6 +433,11 @@ d3.select(country[0][u[u.length-1]]).style("fill",'darkgrey')
 
 svg.selectAll("circle")
 	.on("mouseover", function(d,i) {
+	  d3.select(this).style("stroke-width", function(d) {
+	  var lw = d3.scale.linear().domain([0, d3.max(DZ3)]).range([0.75,10])
+	  return lw(d.pageviews) })
+	  
+	  
 	  mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
 	 
 	 if (mouse[0] > 0.8*W2)
@@ -531,8 +536,8 @@ l = []
          
          .style('align', 'center')
          .on("mouseout", function() {
-//    	 			tooltip1.style("opacity", 0)})
-   	 	 tooltip1.classed("hidden", true)})
+		    d3.select(this).style("stroke-width", 0.5)
+   	 	 	tooltip1.classed("hidden", true)})
    	 	 
    	 	 .on("click", click2)
 
