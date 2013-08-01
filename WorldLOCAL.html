@@ -436,7 +436,7 @@ d3.select(country[0][u[u.length-1]]).style("fill",'darkgrey')
 svg.selectAll("circle")
 	.on("mouseover", function(d,i) {
 	  d3.select(this).style("stroke-width", function(d) {
-	  var lw = d3.scale.linear().domain([0, d3.max(DZ3)]).range([0.75,10])
+	  var lw = d3.scale.linear().domain([0, d3.max(DZ3)]).range([0.75,7])
 	  return lw(d.pageviews) })
 	  
 	  
