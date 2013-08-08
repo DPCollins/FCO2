@@ -609,7 +609,7 @@ function click2(d) {
 	function next2() {
     return {
       time: ++t,
-      value: v = ~~ -200
+      value: v = ~~ -350
     };
  		   }
 	
@@ -628,7 +628,7 @@ function click2(d) {
     DD = 1.05*d3.max(JJ)
     
     y = d3.scale.linear()
-      .domain([-200, parseInt(DD)])
+      .domain([-350, parseInt(DD)])
       .rangeRound([0, h]);
 	
 	var WID = 490;
