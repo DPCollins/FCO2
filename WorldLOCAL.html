@@ -374,20 +374,21 @@ d3.csv("http://dpcollins.github.io/FCO2/WV2TEST.csv", function(error, data) {
     DZ2.push(parseFloat(DZ[0][i].pct_change))
     DZ3.push(parseFloat(DZ[0][i].pageviews))}
     
-    svg.selectAll("circle")
-       .data(data)
-       .enter()
-       .append("circle")
-       .attr("cx", function(d) {
+  cv = svg.selectAll("circle")
+           .data(data)
+           .enter()
+           .append("circle")
+           .attr("cx", function(d) {
                return projection([d.lon, d.lat])[0]; console.log(d.lon);
        })
-       .attr("cy", function(d) {
+           .attr("cy", function(d) {
                return projection([d.lon, d.lat])[1];
        })
-       .attr("r", function(d) {if (d.pageviews!=0) {
-       					return radius(d.pageviews)} })
-
-	  .style("fill", function(d)
+       
+           .attr("r",0) 
+       
+	  
+	       .style("fill", function(d)
        					{
        					if (d.pct_change !='' && d.pct_change < 0) {FG.push(parseFloat(d.pct_change)); 
        					
@@ -404,18 +405,18 @@ d3.csv("http://dpcollins.github.io/FCO2/WV2TEST.csv", function(error, data) {
        					
        					return color(d.pct_change)
        					}) 
-//       			
-      
-//  .style("fill", function(d) {if (d.pct_change > 0)
-// 	 		{FC = '+'; FF = 'Green'}
-//      	else 
-//      		{FC = ''; FF = 'Red'} return FF })
+      			
        .style("opacity", 0.7)
        .style("stroke", '#fff')
-       .style("stroke-width", 0.5);
+     //   .style("stroke-width", function(d)
+//        					{
+//        					var lw = d3.scale.linear().domain([0, d3.max(DZ3)]).range([0.5,2.5])
+//        					return lw(d.pageviews)}
        
-//        })
-// x = function(d) {return xz = data}
+        .style("stroke-width", 0.5)
+        .transition().duration(3000).attr("r", function(d) {if (d.pageviews!=0) {
+       					return radius(d.pageviews)} })
+
 XZ.push(data)
 l = []
 u = []	
@@ -864,7 +865,7 @@ d3.csv("http://dpcollins.github.io/FCO2/TopUps.csv", function(error, data) {
 			  .style('bottom', 5+'%')
 // 			  .style('margin-bottom', 10)
 		 
-		  rect1 = svg2.append('rect').transition().duration(500)
+		  rect1 = svg2.append('rect').transition().duration(100)
 		  			.attr('width', 295)
 		  			.attr('height', 80+'%')
 		  			.attr('x', 5)
