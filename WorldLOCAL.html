@@ -847,6 +847,131 @@ function reset() {
 
 }
 
+
+TUP = []
+
+// $(document).ready(function() {
+
+d3.csv("http://localhost:8888/Documents/FCO2/TopUps.csv", function(error, data) {
+	TUP.push(data)
+	body = d3.select('body')
+	
+	
+	svg2 = body.append('svg')
+			  .attr('height', 20+'%')
+			  .attr('width', '25%')
+			  .style('position', 'fixed')
+			  .style('bottom', 5+'%')
+// 			  .style('margin-bottom', 10)
+		 
+		  rect1 = svg2.append('rect').transition().duration(500)
+		  			.attr('width', 295)
+		  			.attr('height', 80+'%')
+		  			.attr('x', 5)
+		  			.attr('y', 5+'%')
+		  			.style('fill', 'lightgrey')
+		  			.style('opacity', 0.5)
+		  			.attr('stroke', 'darkgrey')
+		  			.attr('filter', "url(#dropshadow)");
+		  			
+function draw(i) {
+  				textK = svg2.append('foreignObject')
+                        .attr('x', 1)
+                        .attr('y', '6%')
+                        .attr('width', 290)
+                        .attr('height', 80+'%')
+                        .append("xhtml:body")
+                        .style("font-family", 'monospace')
+                        .style("opacity", 0)
+                                                              
+// //     			.html('<div style="width: 285px;">This is some information about whatever</div>')
+    			.html('<div style="width: 285px;">'+ '<b>' + TUP[0][i]['Updated_at'] + '   ' + TUP[0][i]['Country'] + '</b>' + '<br></br>'+ '   ' + TUP[0][i]['Latest_Update']+'</div>')
+				
+				textK.transition().duration(1000).style("opacity",1)
+				
+				setTimeout(function() {textK.transition().duration(1000).style("opacity", 0).remove()}, 7000)
+}
+
+draw(0)
+
+setInterval(function() {Ddraw()}, 9000);
+
+function Ddraw() {
+
+shuffle = function(v){
+    for(var j, x, i = v.length; i; j = parseInt(Math.random() * i), x = v[--i], v[i] = v[j], v[j] = x);
+    return v;
+};
+
+var list = []
+for (var ik = 0; ik <= TUP[0].length; ik++) {
+    list.push(ik);
+}
+
+a = shuffle(list) 
+draw(list[0])
+
+}
+
+var defs = svg.append("defs");
+
+  var filter = defs.append("filter")
+      .attr("id", "dropshadow")
+      .attr("height", "130%")
+
+  filter.append("feGaussianBlur")
+      .attr("in", "SourceAlpha")
+      .attr("stdDeviation", 5)
+      .attr("result", "blur");
+  filter.append("feOffset")
+      .attr("in", "blur")
+      .attr("dx", 5)
+      .attr("dy", 5)
+      .attr("result", "offsetBlur");
+
+  var feMerge = filter.append("feMerge");
+
+  feMerge.append("feMergeNode")
+      .attr("in", "offsetBlur")
+  feMerge.append("feMergeNode")
+      .attr("in", "SourceGraphic");
+
+
+
+
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 	.attr("r", 3);}
 
 
