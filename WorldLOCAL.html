@@ -897,6 +897,8 @@ draw(0)
 
 setInterval(function() {Ddraw()}, 9000);
 
+count = 1
+
 function Ddraw() {
 
 shuffle = function(v){
@@ -909,8 +911,11 @@ for (var ik = 0; ik <= TUP[0].length; ik++) {
     list.push(ik);
 }
 
-a = shuffle(list) 
-draw(list[0])
+// a = shuffle(list) 
+draw(list[count])
+if(count == TUP[0].length-1) {count = 0}
+else {
+count++}
 
 }
 
