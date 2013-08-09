@@ -657,7 +657,7 @@ function click2(d) {
         	// .attr("height", 0)
         	// .transition(1000)
         	.attr("height", function(d) { return 1.5*y(d.value); })
-
+			.attr('filter', "url(#dropshadow)");
 
 line = chart.append("svg:line")
 				  .attr("x1", 0.5)
