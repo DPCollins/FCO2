@@ -610,12 +610,12 @@ function click2(d) {
 	function next2() {
     return {
       time: ++t,
-      value: v = ~~ -350
+      value: v = ~~ 0
     };
  		   }
 	
 	    w = 35,
-      	h = 170;
+      	h = 190;
   
     x = d3.scale.linear()
       .domain([0, 1])
@@ -629,7 +629,7 @@ function click2(d) {
     DD = 1.05*d3.max(JJ)
     
     y = d3.scale.linear()
-      .domain([-350, parseInt(DD)])
+      .domain([0, parseInt(DD)])
       .rangeRound([0, h]);
 	
 	var WID = 490;
@@ -642,7 +642,7 @@ function click2(d) {
 		.attr("class", "chart")
 		.attr("id", d.country)
 		.attr("width", WID)
-		.attr("height", 170)
+		.attr("height", h)
 		.attr("style", "left:"+(mouse[0]+MH)+"px;top:"+(mouse[1] + MV)+"px")
 		
  
