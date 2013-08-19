@@ -250,9 +250,6 @@ var width = W2,
     height = H2,
     active;
     
-var radius = d3.scale.linear()
-    .domain([100, 1e4])
-    .range([1, 50]);
 
 if (W2 > 1500)
 	{Tx = 810;
@@ -379,7 +376,11 @@ d3.csv("http://dpcollins.github.io/FCO2/WV2TEST.csv", function(error, data) {
     DZ2.push(parseFloat(DZ[0][i].pct_change))
     DZ3.push(parseFloat(DZ[0][i].pageviews))}
     
-  cv = svg.selectAll("circle")
+    var radius = d3.scale.linear()
+    .domain([100, d3.max(DZ3)])
+    .range([1, 50]);
+    
+    cv = svg.selectAll("circle")
            .data(data)
            .enter()
            .append("circle")
@@ -809,6 +810,10 @@ function click(d) {
 
 
 function reset() {
+	var radius = d3.scale.linear()
+    .domain([100, d3.max(DZ3)])
+    .range([1, 50]);
+	
 	console.log('reset')
 	svg.selectAll(".active").classed("active", active = false);
 	country.transition().duration(750).attr("transform", "")
