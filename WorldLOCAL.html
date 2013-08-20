@@ -376,7 +376,7 @@ d3.csv("http://dpcollins.github.io/FCO2/WV2TEST.csv", function(error, data) {
     DZ2.push(parseFloat(DZ[0][i].pct_change))
     DZ3.push(parseFloat(DZ[0][i].pageviews))}
     
-    var radius = d3.scale.linear()
+    var radius = d3.scale.sqrt()
     .domain([100, d3.max(DZ3)])
     .range([1, 50]);
     
@@ -810,7 +810,7 @@ function click(d) {
 
 
 function reset() {
-	var radius = d3.scale.linear()
+	var radius = d3.scale.sqrt()
     .domain([100, d3.max(DZ3)])
     .range([1, 50]);
 	
