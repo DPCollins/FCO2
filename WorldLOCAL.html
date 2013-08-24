@@ -771,6 +771,10 @@ function high()  {
 
 function click(d) {
 	
+	var radius = d3.scale.sqrt()
+    .domain([100, d3.max(DZ3)])
+    .range([1, 50]);
+	
 	if (active === d) return reset();
 	svg.selectAll(".active").classed("active", false);
 	d3.select(this).classed("active", active = d);
