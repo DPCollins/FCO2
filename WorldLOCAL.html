@@ -376,9 +376,9 @@ d3.csv("http://dpcollins.github.io/FCO2/WV2TEST.csv", function(error, data) {
     DZ2.push(parseFloat(DZ[0][i].pct_change))
     DZ3.push(parseFloat(DZ[0][i].pageviews))}
     
-    var radius = d3.scale.sqrt()
+    var radius = d3.scale.linear()
     .domain([100, d3.max(DZ3)])
-    .range([1, 50]);
+    .range([3, 50]);
     
     cv = svg.selectAll("circle")
            .data(data)
@@ -771,9 +771,9 @@ function high()  {
 
 function click(d) {
 	
-	var radius = d3.scale.sqrt()
+	var radius = d3.scale.linear()
     .domain([100, d3.max(DZ3)])
-    .range([1, 50]);
+    .range([3, 50]);
 	
 	if (active === d) return reset();
 	svg.selectAll(".active").classed("active", false);
@@ -814,9 +814,9 @@ function click(d) {
 
 
 function reset() {
-	var radius = d3.scale.sqrt()
+	var radius = d3.scale.linear()
     .domain([100, d3.max(DZ3)])
-    .range([1, 50]);
+    .range([3, 50]);
 	
 	console.log('reset')
 	svg.selectAll(".active").classed("active", active = false);
