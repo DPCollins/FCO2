@@ -885,23 +885,23 @@ d3.csv("http://dpcollins.github.io/FCO2/TopUps.csv", function(error, data) {
 		  			.attr('stroke', 'darkgrey')
 		  			.attr('filter', "url(#dropshadow)");
 		  			
-function draw(i) {
-  				textK = svg2.append('foreignObject')
-                        .attr('x', 1)
-                        .attr('y', '6%')
-                        .attr('width', 290)
-                        .attr('height', 80+'%')
-                        .append("xhtml:body")
-                        .style("font-family", 'monospace')
-                        .style("opacity", 0)
+// function draw(i) {
+//   				textK = svg2.append('foreignObject')
+//                         .attr('x', 1)
+//                         .attr('y', '6%')
+//                         .attr('width', 290)
+//                         .attr('height', 80+'%')
+//                         .append("xhtml:body")
+//                         .style("font-family", 'monospace')
+//                         .style("opacity", 0)
                                                               
-// //     			.html('<div style="width: 285px;">This is some information about whatever</div>')
-    			.html('<div style="width: 285px;">'+ '<b>' + TUP[0][i]['Updated_at'] + '   ' + TUP[0][i]['Country'] + '</b>' + '<br></br>'+ '   ' + TUP[0][i]['Latest_Update']+'</div>')
+// // //     			.html('<div style="width: 285px;">This is some information about whatever</div>')
+//     			.html('<div style="width: 285px;">'+ '<b>' + TUP[0][i]['Updated_at'] + '   ' + TUP[0][i]['Country'] + '</b>' + '<br></br>'+ '   ' + TUP[0][i]['Latest_Update']+'</div>')
 				
-				textK.transition().duration(1000).style("opacity",1)
+// 				textK.transition().duration(1000).style("opacity",1)
 				
-				setTimeout(function() {textK.transition().duration(1000).style("opacity", 0).remove()}, 7000)
-}
+// 				setTimeout(function() {textK.transition().duration(1000).style("opacity", 0).remove()}, 7000)
+// }
 
 draw(0)
 
